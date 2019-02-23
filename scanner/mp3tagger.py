@@ -1,6 +1,5 @@
 import sys
-
-from mp3_tagger import MP3File, VERSION_1, VERSION_2, VERSION_BOTH
+import taglib
 
 from scanner.folderscanner import FolderScanner
 from scanner.filenameparser import FileNameParser
@@ -20,46 +19,20 @@ class Mp3Tagger:
                 (artist, song) = res
 
                 # Create MP3File instance.
-                mp3 = MP3File(path + '/' + filename)
+                mp3 = taglib.File(path + '/' + filename)
 
-                mp3.set_version(VERSION_1)
+                for k in list(mp3.tags):
+                    if not (k == 'ARTIST') and not (k == 'TITLE'):
+                        del mp3.tags[k]
 
                 # Updated fileds
-                mp3.artist = artist
-                mp3.song = song
-
-                # Cleared fields
-                mp3.album = ''
-                mp3.year = ''
-                mp3.comment = ''
-                mp3.track = 0
-                mp3.genre = 255
+                mp3.tags['ARTIST'] = artist
+                mp3.tags['TITLE'] = song
 
                 mp3.save()
 
-                mp3.set_version(VERSION_2)
-
-                # Updated fileds
-                mp3.artist = artist
-                mp3.song = song
-
-                # Cleared fields
-                mp3.album = ''
-                mp3.band = None
-                mp3.composer = None
-                mp3.copyright = None
-                mp3.year = ''
-                mp3.comment = ''
-                mp3.track = '0'
-                mp3.genre = '255'
-                mp3.year = None
-                mp3.publisher = None
-                mp3.url = None
-
-                mp3.save()
-
-                mp3.set_version(VERSION_BOTH)
-                print(mp3.get_tags())
+                # mp3.set_version(VERSION_BOTH)
+                print(mp3.tags)
             else:
                 count += 1
                 print(path + '/' + filename + ": Not processed!")
