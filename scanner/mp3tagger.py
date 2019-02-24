@@ -31,7 +31,6 @@ class Mp3Tagger:
 
                 mp3.save()
 
-                # mp3.set_version(VERSION_BOTH)
                 print(mp3.tags)
             else:
                 count += 1
