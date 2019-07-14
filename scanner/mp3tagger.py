@@ -1,5 +1,5 @@
 import sys
-import taglib
+import eyed3
 
 from scanner.folderscanner import FolderScanner
 from scanner.filenameparser import FileNameParser
@@ -19,19 +19,19 @@ class Mp3Tagger:
                 (artist, song) = res
 
                 # Create MP3File instance.
-                mp3 = taglib.File(path + '/' + filename)
+                mp3 = eyed3.load(path + '/' + filename)
 
-                for k in list(mp3.tags):
-                    if not (k == 'ARTIST') and not (k == 'TITLE'):
-                        del mp3.tags[k]
+                # for k in list(mp3.tags):
+                #     if not (k == 'ARTIST') and not (k == 'TITLE'):
+                #         del mp3.tags[k]
+                #
+                # # Updated fileds
+                # mp3.tags['ARTIST'] = artist
+                # mp3.tags['TITLE'] = song
+                #
+                # mp3.save()
 
-                # Updated fileds
-                mp3.tags['ARTIST'] = artist
-                mp3.tags['TITLE'] = song
-
-                mp3.save()
-
-                print(mp3.tags)
+                # print(mp3.info)
             else:
                 count += 1
                 print(path + '/' + filename + ": Not processed!")
